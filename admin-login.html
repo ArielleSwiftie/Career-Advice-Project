@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - CareerPath</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef0 0%, #ffe4e6 50%, #ffccd5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle background pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 182, 193, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 105, 180, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        /* Login Container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 10;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: #d63384;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #d63384;
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #d63384, #e83e8c);
+            color: white;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            color: #d63384;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #b02a5b;
+            transform: translateX(-3px);
+        }
+
+        /* Error message */
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+            border: 1px solid #f5c6cb;
+            animation: shake 0.5s ease;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Success message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+            border: 1px solid #c3e6cb;
+            animation: slideIn 0.3s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Logo */
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #d63384, #e83e8c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Lock icon */
+        .lock-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #d63384, #e83e8c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        /* Setup hint */
+        .setup-hint {
+            background: #fff3cd;
+            color: #856404;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            display: none;
+            border: 1px solid #ffeaa7;
+        }
+
+        .setup-hint.show {
+            display: block;
+        }
+
+        .credentials-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .credentials-link a {
+            color: #d63384;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .credentials-link a:hover {
+            color: #b02a5b;
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Pattern -->
+    <div class="bg-pattern"></div>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="logo">
+            <div class="logo-text">🎯 CareerPath</div>
+        </div>
+
+        <div class="lock-icon">🔒</div>
+
+        <div class="login-header">
+            <h1>Admin Login</h1>
+            <p>Enter your credentials to access the admin panel</p>
+        </div>
+
+        <div id="setupHint" class="setup-hint">
+            <strong>First time setup:</strong> Default credentials are username "admin" and password "admin123". 
+            <br>Click "Manage Credentials" below to change them.
+        </div>
+
+        <div id="errorMessage" class="error-message">
+            Invalid credentials. Please try again.
+        </div>
+
+        <div id="successMessage" class="success-message">
+            Login successful! Redirecting...
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autocomplete="username" placeholder="Enter username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter password">
+            </div>
+
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <div class="credentials-link">
+            <a href="credentials.html">🔐 Manage Credentials</a>
+        </div>
+
+        <a href="home.html" class="back-link">
+            <span>←</span> Back to Home
+        </a>
+    </div>
+
+    <script>
+        // Initialize default credentials if none exist
+        function initializeDefaultCredentials() {
+            const existing = localStorage.getItem('adminCredentials');
+            if (!existing) {
+                const defaultCredentials = {
+                    username: 'admin',
+                    password: 'admin123',
+                    isDefault: true,
+                    createdAt: new Date().toISOString()
+                };
+                localStorage.setItem('adminCredentials', JSON.stringify(defaultCredentials));
+                return defaultCredentials;
+            }
+            return JSON.parse(existing);
+        }
+
+        // Get credentials from localStorage
+        function getCredentials() {
+            const stored = localStorage.getItem('adminCredentials');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error parsing credentials:', e);
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        // Check if already logged in
+        function checkAuth() {
+            const isAuthenticated = sessionStorage.getItem('adminAuthenticated');
+            const loginTime = sessionStorage.getItem('loginTime');
+            
+            if (isAuthenticated === 'true' && loginTime) {
+                // Check if session is older than 1 hour
+                const loginDate = new Date(loginTime);
+                const now = new Date();
+                const diffHours = (now - loginDate) / (1000 * 60 * 60);
+                
+                if (diffHours <= 1) {
+                    window.location.href = 'admin.html';
+                    return;
+                } else {
+                    // Session expired
+                    sessionStorage.removeItem('adminAuthenticated');
+                    sessionStorage.removeItem('loginTime');
+                }
+            }
+        }
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Hide any existing messages
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            
+            // Get stored credentials
+            const credentials = getCredentials();
+            
+            if (!credentials) {
+                // Initialize credentials if none exist
+                initializeDefaultCredentials();
+                showNotification('System initializing. Please try again.', 'error');
+                return;
+            }
+            
+            // Validate credentials
+            if (username === credentials.username && password === credentials.password) {
+                // Show success message
+                successMessage.classList.add('show');
+                
+                // Store authentication state
+                sessionStorage.setItem('adminAuthenticated', 'true');
+                sessionStorage.setItem('loginTime', new Date().toISOString());
+                sessionStorage.setItem('username', username);
+                
+                // Hide setup hint if it was default
+                if (credentials.isDefault) {
+                    const setupHint = document.getElementById('setupHint');
+                    if (setupHint) {
+                        setupHint.classList.remove('show');
+                    }
+                }
+                
+                // Redirect to admin panel after a short delay
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1500);
+                
+            } else {
+                // Show error message
+                errorMessage.classList.add('show');
+                
+                // Clear password field
+                document.getElementById('password').value = '';
+                
+                // Hide error after 3 seconds
+                setTimeout(() => {
+                    errorMessage.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'error' ? '#f8d7da' : '#d4edda'};
+                color: ${type === 'error' ? '#721c24' : '#155724'};
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            
+            const credentials = initializeDefaultCredentials();
+            const setupHint = document.getElementById('setupHint');
+            
+            // Show setup hint if using default credentials
+            if (credentials && credentials.isDefault && setupHint) {
+                setupHint.classList.add('show');
+            }
+            
+            // Focus on username field
+            document.getElementById('username').focus();
+        });
+    </script>
+</body>
+</html>

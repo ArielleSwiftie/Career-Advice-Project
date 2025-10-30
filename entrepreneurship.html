@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="stylesheet" href="chatbot.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrepreneurship Career Survey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --hot-pink: #d63384; --medium-pink: #f06595; --light-pink: #fcc2d7; --pale-pink: #fff0f6; --bg-dark: #212529; --bg-container: #ffffff; --text-primary: #212529; --text-secondary: #6c757d; --border-color: #dee2e6; --shadow-light: rgba(0, 0, 0, 0.08); --shadow-medium: rgba(0, 0, 0, 0.12); --shadow-strong: rgba(214, 51, 132, 0.2); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: var(--text-primary); display: flex; justify-content: center; align-items: center; min-height: 100vh; line-height: 1.7; padding: 20px; position: relative; overflow-x: hidden; }
+        body::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(240, 101, 149, 0.1) 0%, rgba(252, 194, 215, 0.05) 50%, transparent 70%); animation: rotate 40s linear infinite; }
+        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .container { background-color: var(--bg-container); border-radius: 20px; box-shadow: 0 20px 60px var(--shadow-strong); width: 100%; max-width: 850px; overflow: hidden; padding: 50px; text-align: center; position: relative; z-index: 1; border: 1px solid var(--border-color); }
+        .screen { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .screen.active { display: block; opacity: 1; transform: translateY(0); }
+        header h1, header h2 { font-weight: 700; margin-bottom: 10px; background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        header h1 { font-size: 3rem; }
+        header h2 { font-size: 2.2rem; }
+        header p { color: var(--text-secondary); font-size: 1.1rem; font-weight: 400; max-width: 600px; margin: 0 auto 40px auto; }
+        .btn-primary, .btn-secondary, .btn-tertiary { border: none; padding: 18px 45px; font-size: 1rem; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase; letter-spacing: 1px; }
+        .btn-primary { background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); color: var(--bg-container); box-shadow: 0 10px 25px rgba(214, 51, 132, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(214, 51, 132, 0.4); }
+        .btn-secondary { background-color: transparent; color: var(--hot-pink); border: 2px solid var(--hot-pink); margin-top: 20px; }
+        .btn-secondary:hover { background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); color: var(--bg-container); border-color: transparent; transform: translateY(-3px); }
+        .btn-tertiary { background-color: var(--pale-pink); color: var(--hot-pink); padding: 12px 25px; font-size: 0.9rem; margin-top: 15px; }
+        .btn-tertiary:hover { background-color: var(--light-pink); transform: translateY(-2px); }
+        .progress-container { width: 100%; height: 8px; background-color: var(--border-color); border-radius: 10px; margin-bottom: 40px; overflow: hidden; }
+        #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--hot-pink), var(--medium-pink)); border-radius: 10px; transition: width 0.5s ease; }
+        #question-text { font-size: 1.7rem; font-weight: 600; color: var(--text-primary); margin-bottom: 30px; }
+        .options-grid { display: grid; gap: 15px; }
+        .option-btn { background-color: var(--bg-container); border: 2px solid var(--border-color); padding: 20px 25px; border-radius: 15px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-align: left; position: relative; overflow: hidden; }
+        .option-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); opacity: 0; transition: opacity 0.3s ease; z-index: 0; }
+        .option-btn span { position: relative; z-index: 1; }
+        .option-btn:hover { border-color: var(--hot-pink); transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px var(--shadow-strong); color: var(--bg-container); }
+        .option-btn:hover::before { opacity: 1; }
+        #results-list { width: 100%; text-align: left; margin-top: 30px; }
+        .result-item { display: flex; align-items: center; margin-bottom: 20px; padding: 15px; border-radius: 15px; background-color: #fafafa; border: 1px solid var(--border-color); }
+        .result-icon { min-width: 50px; height: 50px; margin-right: 20px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); border-radius: 12px; color: var(--bg-container); font-size: 24px; }
+        .result-content { flex-grow: 1; }
+        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .result-name { font-weight: 600; color: var(--text-primary); font-size: 1.1rem; }
+        .result-percentage { font-weight: 700; color: var(--hot-pink); font-size: 1.2rem; }
+        .result-bar { width: 100%; height: 10px; background-color: var(--border-color); border-radius: 50px; overflow: hidden; }
+        .result-bar-fill { height: 100%; background: linear-gradient(90deg, var(--hot-pink), var(--medium-pink)); width: 0%; border-radius: 50px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        #results-list .result-item:first-child { background: linear-gradient(135deg, rgba(252, 194, 215, 0.3), rgba(255, 240, 246, 0.5)); border-color: var(--medium-pink); }
+        #results-list .result-item:first-child .result-name { font-size: 1.2rem; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        @media (max-width: 600px) { .container { padding: 30px 20px; } header h1 { font-size: 2.2rem; } header h2 { font-size: 1.8rem; } #question-text { font-size: 1.3rem; } .option-btn { padding: 18px; } .result-item { padding: 12px; } .result-icon { min-width: 40px; height: 40px; font-size: 20px; margin-right: 15px; } .nav-buttons { flex-direction: column; gap: 10px; } }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div id="quiz-screen" class="screen active">
+            <div class="progress-container"><div id="progress-bar"></div></div>
+            <div class="question-container">
+                <h2 id="question-text">Question will go here</h2>
+                <div id="options-container" class="options-grid"></div>
+            </div>
+        </div>
+        <div id="results-screen" class="screen">
+            <header><h2>Your Job Matches</h2><p>Based on your preferences, here are the best-suited jobs for you in this field.</p></header>
+            <div id="results-list"></div>
+            <div class="nav-buttons">
+                <button id="back-btn" class="btn-tertiary">Back to Field Results</button>
+                <button id="retake-btn" class="btn-secondary">Retake This Survey</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const surveyData = {
+                jobs: { "Startup Founder": {}, "Small Business Owner (e.g., Restaurant)": {}, "Freelancer/Consultant": {}, "Franchise Owner": {}, "Social Entrepreneur": {}, "E-commerce Store Owner": {} },
+                questions: [
+                    { text: "What is the primary driver for your entrepreneurial venture?", options: [ { text: "To disrupt an industry with a groundbreaking idea.", impacts: { "Startup Founder": 3 } }, { text: "To build a beloved local business and community hub.", impacts: { "Small Business Owner (e.g., Restaurant)": 3 } }, { text: "To have autonomy and sell my specific skills.", impacts: { "Freelancer/Consultant": 3 } }, { text: "To solve a social or environmental problem.", impacts: { "Social Entrepreneur": 3 } } ]},
+                    { text: "How do you feel about risk?", options: [ { text: "I'm willing to risk everything for a huge potential reward.", impacts: { "Startup Founder": 3 } }, { text: "I'm taking a significant personal financial risk.", impacts: { "Small Business Owner (e.g., Restaurant)": 2, "Franchise Owner": 1 } }, { text: "My risk is more about income stability than capital.", impacts: { "Freelancer/Consultant": 2 } }, { text: "I prefer a proven model to minimize risk.", impacts: { "Franchise Owner": 3 } } ]},
+                    { text: "What kind of business excites you most?", options: [ { text: "A tech company with rapid scaling potential.", impacts: { "Startup Founder": 2, "E-commerce Store Owner": 1 } }, { text: "A brick-and-mortar store with face-to-face customer interaction.", impacts: { "Small Business Owner (e.g., Restaurant)": 2, "Franchise Owner": 2 } }, { text: "A business that exists entirely online.", impacts: { "E-commerce Store Owner": 3, "Freelancer/Consultant": 1 } }, { text: "A non-profit or a B-Corp with a mission at its core.", impacts: { "Social Entrepreneur": 3 } } ]},
+                    { text: "What is your biggest strength?", options: [ { text: "Vision and innovation.", impacts: { "Startup Founder": 3 } }, { text: "Customer service and creating a great experience.", impacts: { "Small Business Owner (e.g., Restaurant)": 3, "Franchise Owner": 1 } }, { text: "Self-discipline and expertise in my field.", impacts: { "Freelancer/Consultant": 3 } }, { text: "Following a system and executing it well.", impacts: { "Franchise Owner": 3 } } ]},
+                    { text: "How do you prefer to work?", options: [ { text: "With a co-founder and a small, dedicated team.", impacts: { "Startup Founder": 2, "Social Entrepreneur": 1 } }, { text: "Hands-on, managing every aspect of the business.", impacts: { "Small Business Owner (e.g., Restaurant)": 3 } }, { text: "Independently, managing my own projects and clients.", impacts: { "Freelancer/Consultant": 3 } }, { text: "By managing a team within a larger framework.", impacts: { "Franchise Owner": 2 } } ]}
+                ]
+            };
+            const screens = { quiz: document.getElementById('quiz-screen'), results: document.getElementById('results-screen') };
+            const els = { questionText: document.getElementById('question-text'), optionsContainer: document.getElementById('options-container'), progressBar: document.getElementById('progress-bar'), resultsList: document.getElementById('results-list'), backBtn: document.getElementById('back-btn'), retakeBtn: document.getElementById('retake-btn') };
+            let state = { currentQuestionIndex: 0, scores: {} };
+            function initializeScores() { for (const job in surveyData.jobs) { state.scores[job] = 0; } }
+            els.retakeBtn.addEventListener('click', startSurvey);
+            els.backBtn.addEventListener('click', () => window.location.href = 'index.html');
+            function showScreen(screenKey) { Object.values(screens).forEach(s => s.classList.remove('active')); screens[screenKey].classList.add('active'); }
+            function startSurvey() { state.currentQuestionIndex = 0; state.scores = {}; initializeScores(); showScreen('quiz'); showQuestion(); }
+            function showQuestion() { els.optionsContainer.innerHTML = ''; const currentQuestion = surveyData.questions[state.currentQuestionIndex]; els.questionText.textContent = currentQuestion.text; currentQuestion.options.forEach((option) => { const button = document.createElement('button'); button.classList.add('option-btn'); button.innerHTML = `<span>${option.text}</span>`; button.addEventListener('click', () => selectOption(option)); els.optionsContainer.appendChild(button); }); updateProgressBar(); }
+            function selectOption(option) { for (const job in option.impacts) { if (state.scores.hasOwnProperty(job)) { state.scores[job] += option.impacts[job]; } } state.currentQuestionIndex++; if (state.currentQuestionIndex < surveyData.questions.length) { showQuestion(); } else { showResultsScreen(); } }
+            function updateProgressBar() { const progress = ((state.currentQuestionIndex + 1) / surveyData.questions.length) * 100; els.progressBar.style.width = `${progress}%`; }
+            function showResultsScreen() { showScreen('results'); els.resultsList.innerHTML = ''; const totalScore = Object.values(state.scores).reduce((a, b) => a + b, 0); if (totalScore === 0) return; const sortedJobs = Object.keys(state.scores).sort((a, b) => state.scores[b] - state.scores[a]); sortedJobs.forEach((job, index) => { const score = state.scores[job]; const percentage = Math.round((score / totalScore) * 100); const resultItem = document.createElement('div'); resultItem.classList.add('result-item'); resultItem.style.animationDelay = `${index * 0.1}s`; resultItem.innerHTML = `<div class="result-icon">💼</div><div class="result-content"><div class="result-header"><span class="result-name">${job}</span><span class="result-percentage">${percentage}%</span></div><div class="result-bar"><div class="result-bar-fill" style="width: 0%;" data-percentage="${percentage}"></div></div></div>`; els.resultsList.appendChild(resultItem); }); setTimeout(() => animateBars(els.resultsList), 100); }
+            function animateBars(listElement) { const bars = listElement.querySelectorAll('.result-bar-fill'); bars.forEach(bar => { bar.style.width = bar.dataset.percentage + '%'; }); }
+            startSurvey();
+        });
+    </script>
+	<style>
+        /* CareerPathA AI Chatbot Styles */
+        #careerChatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Chat Button */
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b9d, #ff9ff3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 3px solid white;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .chat-icon {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .chat-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff1493;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+            border: 2px solid white;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Chat Window */
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 550px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 107, 157, 0.2);
+            overflow: hidden;
+        }
+
+        .chat-window.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            visibility: visible;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: linear-gradient(135deg, #ff6b9d, #ff9ff3);
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(255, 107, 157, 0.2);
+        }
+
+        .chat-header-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-info {
+            color: white;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            font-size: 1rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-status {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .chat-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .minimize-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .minimize-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Messages Container */
+        .chat-messages {
+            flex: 1;
+            padding: 1.2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 107, 157, 0.1);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ff6b9d, #ff9ff3);
+            border-radius: 3px;
+        }
+
+        /* Message Styles */
+        .message {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .user-message {
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+        }
+
+        .message-content {
+            max-width: 85%;
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, #ff6b9d, #ff9ff3);
+            color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px 20px 6px 20px;
+            box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+        }
+
+        .bot-message .message-content {
+            background: white;
+            color: #555;
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px 20px 20px 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 107, 157, 0.1);
+        }
+
+        .message-text {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            opacity: 0.8;
+        }
+
+        .user-message .message-time {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .bot-message .message-time {
+            color: #999;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.05), rgba(255, 159, 243, 0.05));
+            border-left: 4px solid #ff6b9d;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 107, 157, 0.1);
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 159, 243, 0.1));
+            border: 2px solid rgba(255, 107, 157, 0.2);
+            color: #ff6b9d;
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(255, 107, 157, 0.1);
+        }
+
+        .quick-btn:hover {
+            background: linear-gradient(135deg, #ff6b9d, #ff9ff3);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+        }
+
+        /* Input Area */
+        .chat-input-container {
+            padding: 1rem 1.2rem;
+            border-top: 1px solid rgba(255, 107, 157, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        #chatInput {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid rgba(255, 107, 157, 0.2);
+            border-radius: 25px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        #chatInput:focus {
+            border-color: #ff6b9d;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        }
+
+        #chatInput::placeholder {
+            color: #999;
+        }
+
+        .send-btn {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff6b9d, #ff9ff3);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 107, 157, 0.3);
+            border: 2px solid white;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 0.3rem;
+            padding: 0.8rem 1.2rem;
+            background: white;
+            border-radius: 20px 20px 20px 6px;
+            border: 1px solid rgba(255, 107, 157, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff6b9d;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            #careerChatbot {
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .chat-window {
+                width: calc(100vw - 30px);
+                height: 75vh;
+                right: -15px;
+                bottom: 75px;
+                border-radius: 15px;
+            }
+            
+            .quick-actions {
+                justify-content: center;
+            }
+            
+            .quick-btn {
+                font-size: 0.8rem;
+                padding: 0.5rem 0.8rem;
+            }
+        }
+    </style>
+
+    <!-- Chatbot HTML -->
+    <div id="careerChatbot">
+        <!-- Chat Button -->
+        <div id="chatButton" class="chat-button">
+            <div class="chat-icon">💬</div>
+            <div class="chat-badge">1</div>
+        </div>
+        
+        <!-- Chat Window -->
+        <div id="chatWindow" class="chat-window">
+            <!-- Header -->
+            <div class="chat-header">
+                <div class="chat-header-content">
+                    <div class="chat-avatar">🤖</div>
+                    <div class="chat-info">
+                        <div class="chat-name">CareerPathA AI</div>
+                        <div class="chat-status">Online • Ready to help!</div>
+                    </div>
+                </div>
+                <button id="minimizeChat" class="minimize-btn">−</button>
+            </div>
+            
+            <!-- Messages Container -->
+            <div id="chatMessages" class="chat-messages">
+                <!-- Messages will be added here -->
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="chatbot.sendQuickMessage('survey')">📋 Take Survey</button>
+                <button class="quick-btn" onclick="chatbot.sendQuickMessage('careers')">🎯 Career Fields</button>
+                <button class="quick-btn" onclick="chatbot.sendQuickMessage('help')">💡 Get Help</button>
+            </div>
+            
+            <!-- Input Area -->
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" placeholder="Ask me about careers..." maxlength="100">
+                <button id="sendButton" class="send-btn">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot JavaScript -->
+    <script>
+        // CareerPath AI Chatbot
+        class CareerChatbot {
+            constructor() {
+                this.isOpen = false;
+                this.messages = [];
+                this.responses = {
+                    greetings: [
+                        "Hello! I'm your CareerPath AI assistant! 🌸 How can I help you discover your perfect career today?",
+                        "Hi there! I'm here to help with your career journey! What would you like to know?",
+                        "Welcome! I'm your personal career guide. Ask me anything about careers or take our surveys! 💕"
+                    ],
+                    career_help: [
+                        "I can help you discover different career paths! Take our career survey to get personalized recommendations. 🎯",
+                        "Great question! We have surveys for 9 different career fields. Which interests you most: Technology, Healthcare, Business, Creative Arts, Education, Law, Science, Engineering, or Trades?",
+                        "Let me guide you! Start with our main career field survey, then take specific surveys in areas that interest you. Each survey takes just 5 minutes! ✨"
+                    ],
+                    survey_info: [
+                        "Our surveys analyze your interests, skills, and preferences to suggest the best career matches! 📊",
+                        "The surveys are quick (10 questions) and provide instant results with detailed career information!",
+                        "You can take the main survey first to find your career field, then specific surveys for detailed job recommendations! 🚀"
+                    ],
+                    career_fields: [
+                        "We cover 9 main career fields: 💻 Technology, 🏥 Healthcare, 💼 Business, 🎨 Creative Arts, 📚 Education, ⚖️ Law, 🔬 Science, 🏗️ Engineering, and 🔧 Trades!",
+                        "Each career field has multiple specific job roles. For example, Technology includes Software Development, Cybersecurity, Data Science, and UX/UI Design!",
+                        "Not sure which field? Take our main survey to discover which career field best matches your personality! 🌟"
+                    ],
+                    about: [
+                        "CareerPath is a career guidance platform created by a high-school learner to help students discover their perfect career path! 🎓",
+                        "We use interactive surveys to match your interests and skills with suitable careers. It's completely free and educational!",
+                        "This project was created as part of a career development program to help fellow students find their calling! 💕"
+                    ],
+                    default: [
+                        "That's interesting! Could you tell me more about what you're looking for? 🤔",
+                        "I'm here to help with career guidance! Try asking about surveys, career fields, or taking our assessments! 📋",
+                        "Great question! I can help you with career discovery, survey information, or guide you to the right resources! 🌸"
+                    ]
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.attachEventListeners();
+                setTimeout(() => this.addWelcomeMessage(), 1000);
+            }
+            
+            attachEventListeners() {
+                const chatButton = document.getElementById('chatButton');
+                const minimizeBtn = document.getElementById('minimizeChat');
+                const sendButton = document.getElementById('sendButton');
+                const chatInput = document.getElementById('chatInput');
+                
+                // Toggle chat window
+                chatButton.addEventListener('click', () => this.toggleChat());
+                minimizeBtn.addEventListener('click', () => this.toggleChat());
+                
+                // Send message
+                sendButton.addEventListener('click', () => this.sendMessage());
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
+                    }
+                });
+                
+                // Close on escape
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.isOpen) {
+                        this.toggleChat();
+                    }
+                });
+            }
+            
+            toggleChat() {
+                const chatWindow = document.getElementById('chatWindow');
+                const chatButton = document.getElementById('chatButton');
+                
+                this.isOpen = !this.isOpen;
+                
+                if (this.isOpen) {
+                    chatWindow.classList.add('open');
+                    chatButton.style.display = 'none';
+                    document.getElementById('chatInput').focus();
+                    
+                    // Remove badge after opening
+                    const badge = document.querySelector('.chat-badge');
+                    if (badge) {
+                        badge.style.display = 'none';
+                    }
+                } else {
+                    chatWindow.classList.remove('open');
+                    chatButton.style.display = 'flex';
+                }
+            }
+            
+            addWelcomeMessage() {
+                const messagesContainer = document.getElementById('chatMessages');
+                
+                // Add welcome card
+                const welcomeHTML = `
+                    <div class="welcome-message">
+                        <strong>👋 Welcome to CareerPath!</strong><br>
+                        I'm your AI career assistant. I can help you discover career paths, explain our surveys, and guide you to the right resources. How can I help you today?
+                    </div>
+                `;
+                
+                messagesContainer.insertAdjacentHTML('beforeend', welcomeHTML);
+                
+                // Add greeting message
+                setTimeout(() => {
+                    const greeting = this.getRandomResponse('greetings');
+                    this.addMessage(greeting, 'bot');
+                }, 500);
+            }
+            
+            sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+                
+                // Add user message
+                this.addMessage(message, 'user');
+                input.value = '';
+                
+                // Show typing indicator
+                this.showTypingIndicator();
+                
+                // Generate bot response
+                setTimeout(() => {
+                    this.hideTypingIndicator();
+                    const response = this.generateResponse(message);
+                    this.addMessage(response, 'bot');
+                }, 1000);
+            }
+            
+            sendQuickMessage(type) {
+                let message = '';
+                switch(type) {
+                    case 'survey':
+                        message = 'Tell me about the surveys';
+                        break;
+                    case 'careers':
+                        message = 'What career fields do you cover?';
+                        break;
+                    case 'help':
+                        message = 'I need help choosing a career';
+                        break;
+                }
+                
+                document.getElementById('chatInput').value = message;
+                this.sendMessage();
+            }
+            
+            showTypingIndicator() {
+                const messagesContainer = document.getElementById('chatMessages');
+                const typingHTML = `
+                    <div id="typingIndicator" class="message bot-message">
+                        <div class="message-content">
+                            <div class="typing-indicator">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                messagesContainer.insertAdjacentHTML('beforeend', typingHTML);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            generateResponse(userMessage) {
+                const message = userMessage.toLowerCase();
+                
+                // Check for keywords and provide relevant responses
+                if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+                    return this.getRandomResponse('greetings');
+                } else if (message.includes('survey') || message.includes('assessment') || message.includes('test')) {
+                    return this.getRandomResponse('survey_info');
+                } else if (message.includes('career') || message.includes('job') || message.includes('work')) {
+                    return this.getRandomResponse('career_help');
+                } else if (message.includes('field') || message.includes('fields') || message.includes('options')) {
+                    return this.getRandomResponse('career_fields');
+                } else if (message.includes('about') || message.includes('who') || message.includes('what is')) {
+                    return this.getRandomResponse('about');
+                } else if (message.includes('help') || message.includes('stuck') || message.includes('confused')) {
+                    return "Don't worry! I'm here to help! 🌟 Start with our main career survey to discover your path. You can also ask me about specific career fields or survey information!";
+                } else if (message.includes('technology') || message.includes('tech') || message.includes('it')) {
+                    return "Technology careers are amazing! 💻 They include Software Development, Cybersecurity, Data Science, and UX/UI Design. Take our Technology survey to see which tech career suits you best!";
+                } else if (message.includes('healthcare') || message.includes('medical') || message.includes('medicine')) {
+                    return "Healthcare is a rewarding field! 🏥 It includes doctors, nurses, medical researchers, and healthcare administrators. Our Medicine survey can help you find your perfect healthcare role!";
+                } else if (message.includes('business') || message.includes('finance') || message.includes('marketing')) {
+                    return "Business careers offer great opportunities! 💼 From finance to marketing to management, there's something for everyone. Try our Business survey to discover your business calling!";
+                } else if (message.includes('creative') || message.includes('art') || message.includes('design')) {
+                    return "Creative careers let you express yourself! 🎨 Design, writing, performing arts, and more await you. Our Creative survey will help you find your artistic path!";
+                } else if (message.includes('thank') || message.includes('thanks')) {
+                    return "You're welcome! 💕 Remember, I'm always here to help with your career journey. Don't hesitate to ask if you need anything!";
+                } else if (message.includes('bye') || message.includes('goodbye')) {
+                    return "Goodbye! 🌸 Best of luck with your career journey! Remember, I'm here whenever you need help. Take care!";
+                } else {
+                    return this.getRandomResponse('default');
+                }
+            }
+            
+            getRandomResponse(category) {
+                const responses = this.responses[category];
+                return responses[Math.floor(Math.random() * responses.length)];
+            }
+            
+            addMessage(text, sender) {
+                const messagesContainer = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                
+                const messageContent = `
+                    <div class="message-content">
+                        <div class="message-text">${text}</div>
+                        <div class="message-time">${this.getCurrentTime()}</div>
+                    </div>
+                `;
+                
+                messageDiv.innerHTML = messageContent;
+                messagesContainer.appendChild(messageDiv);
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // Add animation
+                setTimeout(() => {
+                    messageDiv.classList.add('show');
+                }, 100);
+            }
+            
+            getCurrentTime() {
+                const now = new Date();
+                return now.toLocaleTimeString('en-US', { 
+                    hour: 'numeric', 
+                    minute: '2-digit',
+                    hour12: true 
+                });
+            }
+        }
+
+        // Initialize chatbot when page loads
+        let chatbot;
+        document.addEventListener('DOMContentLoaded', function() {
+            chatbot = new CareerChatbot();
+        });
+    </script>
+</body>
+</html>
