@@ -3,240 +3,388 @@
 <head><link rel="stylesheet" href="chatbot.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Pathfinder</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>CareerPathA - Find Your Dream Job ✨</title>
     <style>
-        /* --- CSS Variables for Refined Pink Theme --- */
-        :root {
-            --hot-pink: #d63384;
-            --medium-pink: #f06595;
-            --light-pink: #fcc2d7;
-            --pale-pink: #fff0f6;
-            --bg-dark: #212529;
-            --bg-container: #ffffff;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --border-color: #dee2e6;
-            --shadow-light: rgba(0, 0, 0, 0.08);
-            --shadow-medium: rgba(0, 0, 0, 0.12);
-            --shadow-strong: rgba(214, 51, 132, 0.2);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* --- Global Styles & Resets --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Poppins', sans-serif; background-color: var(--bg-dark); color: var(--text-primary);
-            display: flex; justify-content: center; align-items: center; min-height: 100vh; line-height: 1.7;
-            padding: 20px; position: relative; overflow-x: hidden;
-        }
-        body::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(240, 101, 149, 0.1) 0%, rgba(252, 194, 215, 0.05) 50%, transparent 70%);
-            animation: rotate 40s linear infinite;
-        }
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* --- Main Container --- */
-        .container {
-            background-color: var(--bg-container); border-radius: 20px; box-shadow: 0 20px 60px var(--shadow-strong);
-            width: 100%; max-width: 850px; overflow: hidden; padding: 50px; text-align: center;
-            position: relative; z-index: 1; border: 1px solid var(--border-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 40%, #ff69b4 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* --- Screen Management --- */
-        .screen { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
-        .screen.active { display: block; opacity: 1; transform: translateY(0); }
-
-        /* --- Typography --- */
-        header h1, header h2 {
-            font-weight: 700; margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        /* Floating image elements */
+        .float-image {
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            animation: float 8s infinite ease-in-out;
+            z-index: 10;
+            pointer-events: none;
+            border: 5px solid white;
+            filter: brightness(1.1) contrast(1.05);
         }
-        header h1 { font-size: 3rem; }
-        header h2 { font-size: 2.2rem; }
-        header p { color: var(--text-secondary); font-size: 1.1rem; font-weight: 400; max-width: 600px; margin: 0 auto 40px auto; }
 
-        /* --- Buttons --- */
-        .btn-primary, .btn-secondary, .btn-tertiary {
-            border: none; padding: 18px 45px; font-size: 1rem; font-weight: 600; border-radius: 12px;
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase; letter-spacing: 1px;
+        .img1 {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
         }
+
+        .img2 {
+            top: 20%;
+            right: 8%;
+            animation-delay: 2s;
+        }
+
+        .img3 {
+            bottom: 20%;
+            left: 6%;
+            animation-delay: 4s;
+        }
+
+        .img4 {
+            bottom: 15%;
+            right: 6%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(8deg); }
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff69b4;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            animation: fadeInUp 0.8s ease;
+            position: relative;
+            z-index: 5;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 500px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 5px solid white;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
         .btn-primary {
-            background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); color: var(--bg-container);
-            box-shadow: 0 10px 25px rgba(214, 51, 132, 0.3);
+            background: white;
+            color: #ff69b4;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(214, 51, 132, 0.4); }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
         .btn-secondary {
-            background-color: transparent; color: var(--hot-pink); border: 2px solid var(--hot-pink); margin-top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
         }
-        .btn-secondary:hover { background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); color: var(--bg-container); border-color: transparent; transform: translateY(-3px); }
-        .btn-tertiary {
-            background-color: var(--pale-pink); color: var(--hot-pink); padding: 12px 25px; font-size: 0.9rem; margin-top: 15px;
-        }
-        .btn-tertiary:hover { background-color: var(--light-pink); transform: translateY(-2px); }
 
-        /* --- Quiz Screen Styles --- */
-        .progress-container { width: 100%; height: 8px; background-color: var(--border-color); border-radius: 10px; margin-bottom: 40px; overflow: hidden; }
-        #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--hot-pink), var(--medium-pink)); border-radius: 10px; transition: width 0.5s ease; }
-        #question-text { font-size: 1.7rem; font-weight: 600; color: var(--text-primary); margin-bottom: 30px; }
-        .options-grid { display: grid; gap: 15px; }
-        .option-btn {
-            background-color: var(--bg-container); border: 2px solid var(--border-color); padding: 20px 25px; border-radius: 15px;
-            font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-align: left; position: relative; overflow: hidden;
+        .btn-secondary:hover {
+            background: white;
+            color: #ff69b4;
         }
-        .option-btn::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); opacity: 0; transition: opacity 0.3s ease; z-index: 0;
-        }
-        .option-btn span { position: relative; z-index: 1; }
-        .option-btn:hover {
-            border-color: var(--hot-pink); transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px var(--shadow-strong); color: var(--bg-container);
-        }
-        .option-btn:hover::before { opacity: 1; }
 
-        /* --- Results Screen Styles --- */
-        #results-list { width: 100%; text-align: left; margin-top: 30px; }
-        .result-item {
-            display: flex; align-items: center; margin-bottom: 20px; padding: 15px; border-radius: 15px;
-            background-color: #fafafa; border: 1px solid var(--border-color);
+        /* Image Gallery */
+        .image-gallery {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
         }
-        .result-icon {
-            min-width: 50px; height: 50px; margin-right: 20px; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, var(--hot-pink), var(--medium-pink)); border-radius: 12px; color: var(--bg-container); font-size: 24px;
+
+        .gallery-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid white;
+            transition: transform 0.3s ease;
         }
-        .result-content { flex-grow: 1; }
-        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .result-name { font-weight: 600; color: var(--text-primary); font-size: 1.1rem; }
-        .result-percentage { font-weight: 700; color: var(--hot-pink); font-size: 1.2rem; }
-        .result-bar { width: 100%; height: 10px; background-color: var(--border-color); border-radius: 50px; overflow: hidden; }
-        .result-bar-fill {
-            height: 100%; background: linear-gradient(90deg, var(--hot-pink), var(--medium-pink)); width: 0%;
-            border-radius: 50px; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+        .gallery-img:hover {
+            transform: scale(1.05);
         }
-        #results-list .result-item:first-child {
-            background: linear-gradient(135deg, rgba(252, 194, 215, 0.3), rgba(255, 240, 246, 0.5)); border-color: var(--medium-pink);
+
+        /* Quick Links */
+        .quick-links {
+            margin-top: 3rem;
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-        #results-list .result-item:first-child .result-name { font-size: 1.2rem; }
-        
-        /* --- Responsive Design --- */
-        @media (max-width: 600px) {
-            .container { padding: 30px 20px; } header h1 { font-size: 2.2rem; } header h2 { font-size: 1.8rem; }
-            #question-text { font-size: 1.3rem; } .option-btn { padding: 18px; } .result-item { padding: 12px; }
-            .result-icon { min-width: 40px; height: 40px; font-size: 20px; margin-right: 15px; }
+
+        .quick-link {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .quick-link img {
+            width: 20px;
+            height: 20px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 200px;
+                justify-content: center;
+            }
+
+            .gallery-img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .float-image {
+                width: 100px;
+                height: 100px;
+            }
         }
     </style>
 </head>
 <body>
-    <main class="container">
-        <!-- Start Screen -->
-        <div id="start-screen" class="screen active">
-            <header><h1>Career Pathfinder</h1><p>Discover the career field that truly aligns with your passions and skills. Answer a few questions to find your perfect match!</p></header>
-            <button id="start-btn" class="btn-primary">Start the Quiz</button>
-        </div>
+    <img src="https://picsum.photos/seed/pinkcar1/300/300.jpg" alt="Pink car" class="float-image img1">
+    <img src="https://picsum.photos/seed/careerdesk/300/300.jpg" alt="Career desk" class="float-image img2">
+    <img src="https://picsum.photos/seed/pinkoffice/300/300.jpg" alt="Pink office" class="float-image img3">
+    <img src="https://picsum.photos/seed/pinklaptop/300/300.jpg" alt="Pink laptop" class="float-image img4">
 
-        <!-- Main Quiz Screen -->
-        <div id="quiz-screen" class="screen">
-            <div class="progress-container"><div id="progress-bar"></div></div>
-            <div class="question-container">
-                <h2 id="question-text">Question will go here</h2>
-                <div id="options-container" class="options-grid"></div>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🎯 CareerPathA</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="surveys.html">Surveys</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <section class="hero">
+            <h1>Find Your Dream Job 🌸</h1>
+            <p>Let's discover the perfect career path that makes your heart happy!</p>
+            
+            <img src="https://picsum.photos/seed/careerjourney/500/250.jpg" alt="Career journey" class="hero-image">
+            
+            <div class="cta-buttons">
+                <a href="main.html" class="btn btn-primary">
+                    <img src="https://picsum.photos/seed/rocket/30/30.jpg" alt="Rocket" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+                    Start Survey
+                </a>
+                <a href="surveys.html" class="btn btn-secondary">
+                    <img src="https://picsum.photos/seed/documents/30/30.jpg" alt="Documents" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+                    All Surveys
+                </a>
             </div>
-        </div>
 
-        <!-- Main Results Screen -->
-        <div id="results-screen" class="screen">
-            <header><h2>Your Career Field Matches</h2><p>Here's how your personality and preferences align with various career fields. Click below to explore specific jobs within a field.</p></header>
-            <div id="results-list"></div>
-            <button id="retake-btn" class="btn-secondary">Retake Main Quiz</button>
-        </div>
+            <div class="image-gallery">
+                <img src="https://picsum.photos/seed/pinkcar2/120/120.jpg" alt="Pink car" class="gallery-img">
+                <img src="https://picsum.photos/seed/careermeeting/120/120.jpg" alt="Career meeting" class="gallery-img">
+                <img src="https://picsum.photos/seed/pinkworkspace/120/120.jpg" alt="Pink workspace" class="gallery-img">
+                <img src="https://picsum.photos/seed/careersuccess/120/120.jpg" alt="Career success" class="gallery-img">
+            </div>
+
+            <div class="quick-links">
+                <a href="about.html" class="quick-link">
+                    <img src="https://picsum.photos/seed/info/30/30.jpg" alt="Info">
+                    About Us
+                </a>
+                <a href="contact.html" class="quick-link">
+                    <img src="https://picsum.photos/seed/contact/30/30.jpg" alt="Contact">
+                    Get in Touch
+                </a>
+            </div>
+        </section>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // DOM Elements
-            const screens = { start: document.getElementById('start-screen'), quiz: document.getElementById('quiz-screen'), results: document.getElementById('results-screen') };
-            const els = { startBtn: document.getElementById('start-btn'), retakeBtn: document.getElementById('retake-btn'), questionText: document.getElementById('question-text'), optionsContainer: document.getElementById('options-container'), progressBar: document.getElementById('progress-bar'), resultsList: document.getElementById('results-list') };
-            
-            // Career Data
-            const careerFields = { STEM: { name: "Science, Technology, Engineering & Math", icon: "⚛️" }, Medicine: { name: "Medicine & Healthcare", icon: "🩺" }, Law: { name: "Law & Public Service", icon: "⚖️" }, Business: { name: "Business & Finance", icon: "📈" }, Creative: { name: "Arts, Design & Entertainment", icon: "🎨" }, Education: { name: "Education & Academia", icon: "🎓" }, SocialWork: { name: "Social Work & Counseling", icon: "❤️" }, Trades: { name: "Skilled Trades & Practical Work", icon: "🔧" }, Entrepreneurship: { name: "Entrepreneurship", icon: "🚀" }, Communications: { name: "Communications & Media", icon: "📡" } };
-            
-            // Main Questions (full 30 questions)
-            const mainQuestions = [
-                { text: "What kind of problems do you enjoy solving the most?", options: [ { text: "Logical puzzles with clear right or wrong answers.", impacts: { STEM: 2, Business: 1, Law: 1 } }, { text: "Problems that directly affect people's well-being.", impacts: { Medicine: 2, SocialWork: 2, Education: 1 } }, { text: "Problems with no single correct answer, requiring debate and interpretation.", impacts: { Law: 2, Communications: 2 } }, { text: "Practical, tangible problems I can fix with my hands.", impacts: { Trades: 2, Medicine: 1 } } ]},
-                { text: "What's your ideal work environment?", options: [ { text: "A quiet lab or a focused office.", impacts: { STEM: 2, Medicine: 1, Business: 1 } }, { text: "A bustling office or a courtroom.", impacts: { Law: 2, Business: 2, Entrepreneurship: 1 } }, { text: "A studio, a stage, or an outdoor setting.", impacts: { Creative: 2, Trades: 1 } }, { text: "A classroom, a hospital, or a community center.", impacts: { Education: 2, SocialWork: 2, Medicine: 1 } } ]},
-                { text: "How do you feel about public speaking?", options: [ { text: "I love it! I enjoy persuading and informing an audience.", impacts: { Law: 2, Communications: 2, Education: 1 } }, { text: "I'm comfortable with it, especially when I'm an expert on the topic.", impacts: { Business: 1, Medicine: 1, STEM: 1 } }, { text: "I prefer one-on-one or small group interactions.", impacts: { SocialWork: 2, Medicine: 2, Education: 1 } }, { text: "I'd rather avoid it if possible.", impacts: { Trades: 1, STEM: 1, Creative: 1 } } ]},
-                { text: "Which subject in school did you find most fascinating?", options: [ { text: "Math, Physics, or Computer Science.", impacts: { STEM: 3 } }, { text: "Biology, Chemistry, or Psychology.", impacts: { Medicine: 2, SocialWork: 1 } }, { text: "History, Literature, or Philosophy.", impacts: { Law: 1, Communications: 2, Education: 1 } }, { text: "Art, Music, or Drama.", impacts: { Creative: 3 } } ]},
-                { text: "What motivates you most in a job?", options: [ { text: "Making a lot of money and achieving financial success.", impacts: { Business: 2, Entrepreneurship: 2, Law: 1 } }, { text: "Helping others and making a positive impact on their lives.", impacts: { SocialWork: 3, Medicine: 2, Education: 2 } }, { text: "Discovering new things and innovating.", impacts: { STEM: 3, Entrepreneurship: 1 } }, { text: "Expressing my creativity and seeing my ideas come to life.", impacts: { Creative: 3, Entrepreneurship: 1 } } ]},
-                { text: "How do you prefer to work on a project?", options: [ { text: "Independently, with deep focus and analysis.", impacts: { STEM: 2, Creative: 1, Trades: 1 } }, { text: "Collaboratively, brainstorming and building on others' ideas.", impacts: { Business: 2, Communications: 1, Entrepreneurship: 1 } }, { text: "Leading a team and delegating tasks.", impacts: { Entrepreneurship: 2, Business: 2, Law: 1 } }, { text: "Following a clear set of instructions or a proven process.", impacts: { Trades: 2, Medicine: 1, STEM: 1 } } ]},
-                { text: "What sounds like the most fun weekend activity?", options: [ { text: "Building a piece of furniture or fixing something.", impacts: { Trades: 2, STEM: 1 } }, { text: "Visiting a museum, attending a play, or going to a concert.", impacts: { Creative: 2, Communications: 1 } }, { text: "Playing strategy games or solving a complex puzzle.", impacts: { STEM: 2, Law: 1, Business: 1 } }, { text: "Volunteering for a cause I care about.", impacts: { SocialWork: 2, Law: 1, Medicine: 1 } } ]},
-                { text: "You are given a tight deadline. What is your first reaction?", options: [ { text: "Excitement! I thrive under pressure.", impacts: { Business: 2, Law: 1, Entrepreneurship: 2 } }, { text: "Anxiety, but I'll create a detailed plan to manage it.", impacts: { Medicine: 1, STEM: 1, Business: 1 } }, { text: "Frustration. I prefer to work without constraints.", impacts: { Creative: 2, Entrepreneurship: 1 } }, { text: "I get to work immediately, focusing on the most critical tasks.", impacts: { Trades: 1, Medicine: 2, SocialWork: 1 } } ]},
-                { text: "Which of these skills do you feel is your greatest strength?", options: [ { text: "Empathy and listening.", impacts: { SocialWork: 3, Medicine: 2, Education: 1 } }, { text: "Logical reasoning and critical thinking.", impacts: { Law: 3, STEM: 2, Business: 1 } }, { text: "Creativity and originality.", impacts: { Creative: 3, Entrepreneurship: 1 } }, { text: "Manual dexterity and spatial awareness.", impacts: { Trades: 3, Medicine: 1 } } ]},
-                { text: "What role do you usually play in a group setting?", options: [ { text: "The leader who organizes and directs everyone.", impacts: { Entrepreneurship: 2, Business: 2, Law: 1 } }, { text: "The researcher who finds all the necessary information.", impacts: { STEM: 2, Law: 1, Medicine: 1 } }, { text: "The mediator who ensures everyone gets along.", impacts: { SocialWork: 2, Education: 1, Communications: 1 } }, { text: "The presenter who shares the group's final work.", impacts: { Communications: 2, Law: 1, Business: 1 } } ]},
-                { text: "How do you view rules and regulations?", options: [ { text: "They are essential for a fair and orderly society.", impacts: { Law: 3, Business: 1, Medicine: 1 } }, { text: "They are guidelines, but sometimes it's okay to bend them.", impacts: { Entrepreneurship: 2, Creative: 1 } }, { text: "They can be stifling to innovation and progress.", impacts: { Creative: 2, Entrepreneurship: 2 } }, { text: "They are a necessary framework to work within.", impacts: { Medicine: 2, Trades: 2, STEM: 1 } } ]},
-                { text: "What would be your biggest pet peeve in a job?", options: [ { text: "Monotonous, repetitive tasks.", impacts: { Creative: 2, Entrepreneurship: 1, STEM: 1 } }, { text: "Office politics and gossip.", impacts: { STEM: 1, Trades: 1, Medicine: 1 } }, { text: "Lack of a clear purpose or meaning in my work.", impacts: { SocialWork: 2, Education: 1, Medicine: 1 } }, { text: "Micromanagement and lack of autonomy.", impacts: { Entrepreneurship: 2, Creative: 2, Trades: 1 } } ]},
-                { text: "If you had to learn a new skill for fun, what would it be?", options: [ { text: "Coding or a new software.", impacts: { STEM: 2, Business: 1 } }, { text: "A musical instrument or painting.", impacts: { Creative: 2 } }, { text: "Carpentry or welding.", impacts: { Trades: 2 } }, { text: "A new language or sign language.", impacts: { Communications: 2, SocialWork: 1, Education: 1 } } ]},
-                { text: "How do you handle failure?", options: [ { text: "I analyze what went wrong and use it as a learning opportunity.", impacts: { STEM: 2, Business: 2, Entrepreneurship: 1 } }, { text: "I feel it deeply, but it motivates me to do better next time.", impacts: { Creative: 2, SocialWork: 1 } }, { text: "I seek feedback from others to understand my mistakes.", impacts: { Education: 1, Business: 1, Law: 1 } }, { text: "I try again immediately with a different approach.", impacts: { Entrepreneurship: 2, Trades: 1 } } ]},
-                { text: "What is more important: a high salary or job satisfaction?", options: [ { text: "High salary is the top priority.", impacts: { Business: 2, Law: 1, Entrepreneurship: 1 } }, { text: "Job satisfaction is non-negotiable, even if it pays less.", impacts: { Creative: 2, SocialWork: 2, Education: 2 } }, { text: "A healthy balance of both is ideal.", impacts: { Medicine: 1, STEM: 1, Communications: 1 } }, { text: "I'm motivated by potential earnings from my own success.", impacts: { Entrepreneurship: 3 } } ]},
-                { text: "In a team project, what is your preferred role?", options: [ { text: "The visionary, setting the long-term direction.", impacts: { Entrepreneurship: 2, Business: 1 } }, { text: "The planner, creating timelines and milestones.", impacts: { Business: 2, Law: 1, Education: 1 } }, { text: "The executor, getting the tasks done efficiently.", impacts: { Trades: 2, Medicine: 1, STEM: 1 } }, { text: "The critic, refining and improving the work.", impacts: { Law: 1, Creative: 1, Communications: 1 } } ]},
-                { text: "How do you feel about routine and structure?", options: [ { text: "I find it comforting and it helps me focus.", impacts: { Medicine: 2, Trades: 2, Business: 1 } }, { text: "I need some structure, but I like flexibility within it.", impacts: { Education: 2, STEM: 1, SocialWork: 1 } }, { text: "I prefer a dynamic environment with constant change.", impacts: { Entrepreneurship: 2, Communications: 2, Creative: 1 } }, { text: "I dislike routine and prefer to make my own schedule.", impacts: { Creative: 3, Entrepreneurship: 1 } } ]},
-                { text: "What kind of information do you trust most?", options: [ { text: "Hard data, statistics, and empirical evidence.", impacts: { STEM: 3, Business: 1 } }, { text: "Personal stories, testimonials, and case studies.", impacts: { SocialWork: 2, Communications: 1, Law: 1 } }, { text: "Expert opinions and established theories.", impacts: { Law: 2, Medicine: 2, Education: 1 } }, { text: "My own intuition and gut feeling.", impacts: { Creative: 2, Entrepreneurship: 2 } } ]},
-                { text: "When learning something new, you prefer to:", options: [ { text: "Read the manual or documentation first.", impacts: { STEM: 2, Law: 1 } }, { text: "Jump in and learn through trial and error.", impacts: { Trades: 2, Entrepreneurship: 2, Creative: 1 } }, { text: "Take a class or workshop with an instructor.", impacts: { Education: 2, Medicine: 1, Trades: 1 } }, { text: "Watch videos or see demonstrations.", impacts: { Creative: 2, Communications: 1, Trades: 1 } } ]},
-                { text: "What is your ideal company size?", options: [ { text: "A large, established corporation with clear paths for advancement.", impacts: { Business: 2, Law: 1, Medicine: 1 } }, { text: "A small, tight-knit startup where I can wear many hats.", impacts: { Entrepreneurship: 3, Communications: 1 } }, { text: "A non-profit or organization focused on a mission.", impacts: { SocialWork: 3, Education: 1 } }, { text: "My own practice or working as a freelancer.", impacts: { Creative: 2, Entrepreneurship: 2, Law: 1 } } ]},
-                { text: "How do you approach making a big purchase?", options: [ { text: "I research extensively, comparing specs and reviews.", impacts: { STEM: 2, Business: 1 } }, { text: "I go with a trusted brand or a friend's recommendation.", impacts: { SocialWork: 1, Communications: 1 } }, { text: "I focus on the long-term value and warranty.", impacts: { Business: 1, Law: 1, Trades: 1 } }, { text: "I'm drawn to aesthetics and design.", impacts: { Creative: 2 } } ]},
-                { text: "What does 'success' mean to you?", options: [ { text: "Achieving financial independence and wealth.", impacts: { Business: 3, Entrepreneurship: 2 } }, { text: "Making a lasting, positive impact on the world.", impacts: { SocialWork: 3, Medicine: 2, Education: 1 } }, { text: "Gaining respect and recognition in my field.", impacts: { Law: 2, STEM: 1, Creative: 1 } }, { text: "Having the freedom to do what I love, on my own terms.", impacts: { Creative: 3, Entrepreneurship: 2 } } ]},
-                { text: "Which task sounds most appealing?", options: [ { text: "Analyzing a complex dataset to find trends.", impacts: { STEM: 2, Business: 2 } }, { text: "Designing a user-friendly website interface.", impacts: { Creative: 2, STEM: 1 } }, { text: "Negotiating a contract or a business deal.", impacts: { Business: 2, Law: 2 } }, { text: "Organizing a community fundraising event.", impacts: { SocialWork: 2, Communications: 1, Education: 1 } } ]},
-                { text: "How do you feel about sales and persuasion?", options: [ { text: "I enjoy it and find it exciting.", impacts: { Business: 2, Entrepreneurship: 2, Communications: 1 } }, { text: "I can do it if I believe in the product.", impacts: { Law: 1, Creative: 1, Entrepreneurship: 1 } }, { text: "It's not my favorite, but it's a necessary skill.", impacts: { Medicine: 1, Education: 1, SocialWork: 1 } }, { text: "I strongly dislike it.", impacts: { STEM: 1, Trades: 1, Creative: 1 } } ]},
-                { text: "What kind of projects do you find most fulfilling?", options: [ { text: "Ones that have a clear beginning, middle, and end.", impacts: { Trades: 2, Business: 1 } }, { text: "Long-term projects that I can nurture and grow over time.", impacts: { Education: 2, Medicine: 2, SocialWork: 1 } }, { text: "Projects that require constant innovation and adaptation.", impacts: { Entrepreneurship: 2, Creative: 2, STEM: 1 } }, { text: "Projects that involve building or creating something tangible.", impacts: { Trades: 2, Creative: 2, STEM: 1 } } ]},
-                { text: "When faced with a conflict, you are most likely to:", options: [ { text: "Analyze the situation logically to find a fair solution.", impacts: { Law: 3, Business: 1 } }, { text: "Try to understand everyone's feelings and find a compromise.", impacts: { SocialWork: 3, Education: 1 } }, { text: "Address it directly and stand my ground.", impacts: { Entrepreneurship: 2, Law: 1 } }, { text: "Avoid it if possible.", impacts: { Creative: 1, STEM: 1 } } ]},
-                { text: "What aspect of a job is most important for your day-to-day happiness?", options: [ { text: "Intellectual stimulation and problem-solving.", impacts: { STEM: 3, Law: 1 } }, { text: "A positive and supportive team environment.", impacts: { Education: 2, SocialWork: 2, Medicine: 1 } }, { text: "Autonomy and the freedom to make my own decisions.", impacts: { Entrepreneurship: 3, Creative: 1 } }, { text: "Seeing the tangible results of my work.", impacts: { Trades: 3, Creative: 1 } } ]},
-                { text: "You have a free afternoon. You are most likely to:", options: [ { text: "Read a non-fiction book or watch a documentary.", impacts: { STEM: 1, Law: 1, Medicine: 1 } }, { text: "Work on a personal creative project.", impacts: { Creative: 3 } }, { text: "Go for a hike or do something outdoors.", impacts: { Trades: 1, SocialWork: 1 } }, { text: "Meet up with friends and socialize.", impacts: { Communications: 2, SocialWork: 1, Business: 1 } } ]},
-                { text: "How do you feel about risk?", options: [ { text: "I am very risk-averse and prefer stability.", impacts: { Medicine: 2, Education: 2, Trades: 1 } }, { text: "I am willing to take calculated risks for a good reward.", impacts: { Business: 2, Entrepreneurship: 2, Law: 1 } }, { text: "I am a natural risk-taker and am drawn to uncertainty.", impacts: { Entrepreneurship: 3, Creative: 1 } }, { text: "It depends on the context and what's at stake.", impacts: { Law: 2, Business: 1, SocialWork: 1 } } ]},
-                { text: "What kind of legacy do you want to leave?", options: [ { text: "A scientific discovery or a technological breakthrough.", impacts: { STEM: 3 } }, { text: "A successful company that provides value.", impacts: { Business: 2, Entrepreneurship: 2 } }, { text: "A more just or equitable society.", impacts: { Law: 2, SocialWork: 2 } }, { text: "Beautiful art or inspiring creations.", impacts: { Creative: 3 } } ]}
-            ];
-
-            // --- STATE MANAGEMENT ---
-            let state = { currentQuestionIndex: 0, mainScores: {} };
-
-            // --- INITIALIZATION ---
-            function initializeScores(scoresObject) { for (const key in careerFields) { scoresObject[key] = 0; } }
-
-            // --- EVENT LISTENERS ---
-            els.startBtn.addEventListener('click', startMainQuiz);
-            els.retakeBtn.addEventListener('click', resetMainQuiz);
-            els.resultsList.addEventListener('click', (e) => { if (e.target.classList.contains('explore-btn')) { const field = e.target.dataset.field; localStorage.setItem('careerField', field); window.location.href = `${field.toLowerCase()}.html`; } });
-
-            // --- SCREEN CONTROL ---
-            function showScreen(screenKey) { Object.values(screens).forEach(s => s.classList.remove('active')); screens[screenKey].classList.add('active'); }
-
-            // --- MAIN QUIZ LOGIC ---
-            function startMainQuiz() { state.currentQuestionIndex = 0; state.mainScores = {}; initializeScores(state.mainScores); showScreen('quiz'); showMainQuestion(); }
-            function showMainQuestion() {
-                els.optionsContainer.innerHTML = ''; const currentQuestion = mainQuestions[state.currentQuestionIndex]; els.questionText.textContent = currentQuestion.text;
-                currentQuestion.options.forEach((option) => { const button = document.createElement('button'); button.classList.add('option-btn'); button.innerHTML = `<span>${option.text}</span>`; button.addEventListener('click', () => selectMainOption(option)); els.optionsContainer.appendChild(button); });
-                updateMainProgressBar();
-            }
-            function selectMainOption(option) { for (const field in option.impacts) { if (state.mainScores.hasOwnProperty(field)) { state.mainScores[field] += option.impacts[field]; } } state.currentQuestionIndex++; if (state.currentQuestionIndex < mainQuestions.length) { showMainQuestion(); } else { showMainResultsScreen(); } }
-            function updateMainProgressBar() { const progress = ((state.currentQuestionIndex + 1) / mainQuestions.length) * 100; els.progressBar.style.width = `${progress}%`; }
-            function showMainResultsScreen() {
-                showScreen('results'); els.resultsList.innerHTML = ''; const totalScore = Object.values(state.mainScores).reduce((a, b) => a + b, 0); if (totalScore === 0) return;
-                const sortedCareers = Object.keys(state.mainScores).sort((a, b) => state.mainScores[b] - state.mainScores[a]);
-                sortedCareers.forEach((field, index) => {
-                    const score = state.mainScores[field]; const percentage = Math.round((score / totalScore) * 100); const career = careerFields[field];
-                    const exploreButton = (index < 5 && percentage > 0) ? `<button class="btn-tertiary explore-btn" data-field="${field}">Explore Jobs in This Field</button>` : '';
-                    const resultItem = document.createElement('div'); resultItem.classList.add('result-item'); resultItem.style.animationDelay = `${index * 0.1}s`;
-                    resultItem.innerHTML = `<div class="result-icon">${career.icon}</div><div class="result-content"><div class="result-header"><span class="result-name">${career.name}</span><span class="result-percentage">${percentage}%</span></div><div class="result-bar"><div class="result-bar-fill" style="width: 0%;" data-percentage="${percentage}"></div></div>${exploreButton}</div>`;
-                    els.resultsList.appendChild(resultItem);
-                });
-                setTimeout(() => animateBars(els.resultsList), 100);
-            }
-            function resetMainQuiz() { state.currentQuestionIndex = 0; state.mainScores = {}; showScreen('start'); els.progressBar.style.width = '0%'; }
-            function animateBars(listElement) { const bars = listElement.querySelectorAll('.result-bar-fill'); bars.forEach(bar => { bar.style.width = bar.dataset.percentage + '%'; }); }
-        });
-    </script>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 CareerPathA. Made for your career journey</p>
+		<p>By Arielle Nagdee</p>
+    </footer>
 	<style>
         /* CareerPathA AI Chatbot Styles */
         #careerChatbot {
